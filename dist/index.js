@@ -8767,7 +8767,6 @@ const github = __nccwpck_require__(5438)
 async function getRelease(octokit, tagName) {
   console.log("Retrieving release...")
   try {
-    console.log(octokit)
     const release = await octokit.rest.repos.getReleaseByTag({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
@@ -8796,12 +8795,6 @@ async function deleteExistingAsset(octokit, asset) {
 }
 
 async function uploadNewAsset(octokit, release, file, assetName) {
-  console.log("Updating release description...")
-  await octokit.rest.repos.updateRelease({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    release_id: release.id
-  })
   console.log("Uploading new asset...")
   const headers = {
     "content-type": "application/octet-stream",

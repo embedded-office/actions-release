@@ -8751,151 +8751,104 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nccwpck_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__nccwpck_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-"use strict";
-__nccwpck_require__.r(__webpack_exports__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2186);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(7147);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(fs__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(5438);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_2__);
+const fs = __nccwpck_require__(7147)
 
-
-
+const core = __nccwpck_require__(2186)
+const github = __nccwpck_require__(5438)
 
 async function getRelease(octokit, tagName) {
-  console.log("Retrieving release...");
+  console.log("Retrieving release...")
   try {
     const release = await octokit.repos.getReleaseByTag({
-      owner: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo.owner,
-      repo: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo.repo,
-      tag: tagName,
-    });
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      tag: tagName
+    })
     return release.data;
   } catch (e) {
     if (
       ((e.message) || "").toLowerCase().indexOf("not found") !== -1
     ) {
-      return undefined;
+      return undefined
     }
-    throw e;
+    throw e
   }
 }
 
 async function deleteExistingAsset(octokit, asset) {
   if (asset && asset.id) {
-    console.log("Deleting previous asset...");
+    console.log("Deleting previous asset...")
     await octokit.repos.deleteReleaseAsset({
-      owner: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo.owner,
-      repo: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo.repo,
-      asset_id: asset.id,
-    });
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      asset_id: asset.id
+    })
   }
 }
 
 async function uploadNewAsset(octokit, release, file, assetName) {
-  console.log("Updating release description...");
+  console.log("Updating release description...")
   await octokit.repos.updateRelease({
-    owner: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo.owner,
-    repo: _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.repo.repo,
-    release_id: release.id,
-  });
-  console.log("Uploading new asset...");
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    release_id: release.id
+  })
+  console.log("Uploading new asset...")
   const headers = {
     "content-type": "application/octet-stream",
-    "content-length": fs__WEBPACK_IMPORTED_MODULE_1___default().statSync(file).size,
-  };
+    "content-length": fs.statSync(file).size
+  }
   await octokit.repos.uploadReleaseAsset({
     url: release.upload_url,
     name: assetName,
     headers,
-    data: fs__WEBPACK_IMPORTED_MODULE_1___default().readFileSync(file),
-  });
+    data: fs.readFileSync(file)
+  })
 }
 
 async function main() {
   try {
-    const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("token");
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setSecret(token);
-    const tagName = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("tag-name");
-    const assetName = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("asset-name");
-    const file = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("file");
+    const token = core.getInput("token")
+    core.setSecret(token)
+    const tagName = core.getInput("tag-name")
+    const assetName = core.getInput("asset-name")
+    const file = core.getInput("file")
 
-    if (_actions_github__WEBPACK_IMPORTED_MODULE_2__.context.ref.startsWith("refs/pull")) {
-      console.log("::warning::Skipping action as this is a pull request");
-      return;
+    if (github.context.ref.startsWith("refs/pull")) {
+      console.log("::warning::Skipping action as this is a pull request")
+      return
     }
 
     // find release
-    const octokit = new _actions_github__WEBPACK_IMPORTED_MODULE_2__.GitHub(token);
-    let release = await getRelease(octokit, tagName);
+    const octokit = new github.GitHub(token)
+    let release = await getRelease(octokit, tagName)
     if (!release) {
-      throw new Error("Could not found release");
+      throw new Error("Could not found release")
     }
 
     // replace asset, if already existing
     await deleteExistingAsset(
       octokit,
       release.assets.find((_) => _.name === assetName)
-    );
+    )
 
     // upload asset
-    await uploadNewAsset(octokit, release, file, assetName);
+    await uploadNewAsset(octokit, release, file, assetName)
 
   } catch (error) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
+    core.setFailed(error.message)
   }
 }
 
-main();
+main()
 
 })();
 

@@ -1,3 +1,5 @@
+This is a copy from [djnicholson/release-action](https://github.com/djnicholson/release-action) and adapted to slightly different usecase.
+
 # Add a file to a GitHub Release
 
 This action adds a file to a GitHub Release in the current repo.

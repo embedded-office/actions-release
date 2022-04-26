@@ -67,7 +67,7 @@ async function main() {
     }
 
     // find release
-    const octokit = new github.GitHub(token)
+    const octokit = new github.getOctokit(token)
     let release = await getRelease(octokit, tagName)
     if (!release) {
       throw new Error("Could not found release")

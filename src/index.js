@@ -6,7 +6,7 @@ const github = require('@actions/github')
 async function getRelease(octokit, tagName) {
   console.log("Retrieving release...")
   try {
-    const release = await octokit.repos.getReleaseByTag({
+    const release = await octokit.rest.repos.getReleaseByTag({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       tag: tagName
@@ -25,7 +25,7 @@ async function getRelease(octokit, tagName) {
 async function deleteExistingAsset(octokit, asset) {
   if (asset && asset.id) {
     console.log("Deleting previous asset...")
-    await octokit.repos.deleteReleaseAsset({
+    await octokit.rest.repos.deleteReleaseAsset({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       asset_id: asset.id
@@ -35,7 +35,7 @@ async function deleteExistingAsset(octokit, asset) {
 
 async function uploadNewAsset(octokit, release, file, assetName) {
   console.log("Updating release description...")
-  await octokit.repos.updateRelease({
+  await octokit.rest.repos.updateRelease({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     release_id: release.id
@@ -45,7 +45,7 @@ async function uploadNewAsset(octokit, release, file, assetName) {
     "content-type": "application/octet-stream",
     "content-length": fs.statSync(file).size
   }
-  await octokit.repos.uploadReleaseAsset({
+  await octokit.rest.repos.uploadReleaseAsset({
     url: release.upload_url,
     name: assetName,
     headers,

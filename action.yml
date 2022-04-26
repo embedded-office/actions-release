@@ -1,0 +1,21 @@
+name: 'Add Release File'
+description: 'Adds a specific file to a specific GitHub Release'
+inputs:
+  token:
+    description: 'GitHub auth token'
+    required: true
+  tag-name:
+    description: 'Name of tag to find release to add file to'
+    required: true
+  asset-name:
+    description: 'Name for the asset'
+    required: true
+  file:
+    description: 'File to release'
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
+branding:
+  icon: 'upload-cloud'
+  color: 'green'

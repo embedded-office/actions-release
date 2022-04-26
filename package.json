@@ -1,0 +1,27 @@
+{
+  "name": "action-release",
+  "version": "1.0.0",
+  "description": "Adds a specific file to a specific GitHub Release",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/index.js -o dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/embedded-office/action-release.git"
+  },
+  "keywords": [],
+  "author": "Michael Hillmann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/embedded-office/action-release/issues"
+  },
+  "homepage": "https://github.com/embedded-office/action-release#readme",
+  "dependencies": {
+    "@actions/core": "^1.7.0",
+    "@actions/github": "^5.0.1"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.33.4"
+  }
+}

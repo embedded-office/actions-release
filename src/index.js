@@ -6,6 +6,7 @@ const github = require('@actions/github')
 async function getRelease(octokit, tagName) {
   console.log("Retrieving release...")
   try {
+    console.log(octokit)
     const release = await octokit.rest.repos.getReleaseByTag({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
